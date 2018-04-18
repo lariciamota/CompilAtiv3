@@ -38,9 +38,12 @@ public class MaxArgsVisitor implements IVisitor<Integer> {
 	public Integer count(ExpList e){
 		int count = 1;
 		if (e instanceof LastExpList){
-			return count;
+			int last = ((LastExpList) e).accept(this);
+			return Math.max(count, last);
 		} else { //PairExpList
-			return count + count(((PairExpList) e).getTail());
+			int pair = ((PairExpList) e).accept(this);
+			int count2 = count + count(((PairExpList) e).getTail());
+			return Math.max(pair, count2);
 		}
 	}
 	
@@ -53,14 +56,14 @@ public class MaxArgsVisitor implements IVisitor<Integer> {
 
 	@Override
 	public Integer visit(Exp e) {
-		return e.accept(this); //
+		return e.accept(this); 
 	}
 
 	@Override
 	public Integer visit(EseqExp e) {
 		int stm = e.getStm().accept(this);
 		int exp = e.getExp().accept(this);
-		return Math.max(stm, exp); //
+		return Math.max(stm, exp); 
 	}
 
 	@Override
@@ -77,24 +80,24 @@ public class MaxArgsVisitor implements IVisitor<Integer> {
 	public Integer visit(OpExp e) {
 		int left = e.getLeft().accept(this);
 		int right = e.getRight().accept(this);
-		return Math.max(left, right); //
+		return Math.max(left, right); 
 	}
 
 	@Override
 	public Integer visit(ExpList el) {
-		return el.accept(this); //
+		return el.accept(this); 
 	}
 
 	@Override
 	public Integer visit(PairExpList el) {
 		int exp = el.getHead().accept(this);
 		int list = el.getTail().accept(this); 
-		return Math.max(exp, list); //
+		return Math.max(exp, list); 
 	}
 
 	@Override
 	public Integer visit(LastExpList el) {
-		return el.getHead().accept(this); //
+		return el.getHead().accept(this); 
 	}
 	
 
