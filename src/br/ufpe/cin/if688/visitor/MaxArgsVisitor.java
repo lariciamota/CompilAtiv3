@@ -14,7 +14,10 @@ import br.ufpe.cin.if688.ast.PrintStm;
 import br.ufpe.cin.if688.ast.Stm;
 
 public class MaxArgsVisitor implements IVisitor<Integer> {
-
+/* Deve ser recebido um programa representado com os nós da AST disponíveis (ver exemplos na classe Prog) 
+ * e deve ser retornado o número máximo de argumentos passados em algum comando print do programa; 
+ * (apenas 1 valor)
+ */
 	@Override
 	public Integer visit(Stm s) {
 		return s.accept(this);
@@ -31,23 +34,33 @@ public class MaxArgsVisitor implements IVisitor<Integer> {
 		int dir = s.getStm2().accept(this);
 		return Math.max(esq, dir);
 	}
-
+	
+	public Integer count(ExpList e){
+		int count = 1;
+		if (e instanceof LastExpList){
+			return count;
+		} else { //PairExpList
+			return count + count(((PairExpList) e).getTail());
+		}
+	}
+	
 	@Override
 	public Integer visit(PrintStm s) {
+		ExpList exps = s.getExps();
 		
-		return null;
+		return count(exps);
 	}
 
 	@Override
 	public Integer visit(Exp e) {
-		// TODO Auto-generated method stub
-		return null;
+		return e.accept(this); //
 	}
 
 	@Override
 	public Integer visit(EseqExp e) {
-		// TODO Auto-generated method stub
-		return null;
+		int stm = e.getStm().accept(this);
+		int exp = e.getExp().accept(this);
+		return Math.max(stm, exp); //
 	}
 
 	@Override
@@ -62,26 +75,26 @@ public class MaxArgsVisitor implements IVisitor<Integer> {
 
 	@Override
 	public Integer visit(OpExp e) {
-		// TODO Auto-generated method stub
-		return null;
+		int left = e.getLeft().accept(this);
+		int right = e.getRight().accept(this);
+		return Math.max(left, right); //
 	}
 
 	@Override
 	public Integer visit(ExpList el) {
-		// TODO Auto-generated method stub
-		return null;
+		return el.accept(this); //
 	}
 
 	@Override
 	public Integer visit(PairExpList el) {
-		// TODO Auto-generated method stub
-		return null;
+		int exp = el.getHead().accept(this);
+		int list = el.getTail().accept(this); 
+		return Math.max(exp, list); //
 	}
 
 	@Override
 	public Integer visit(LastExpList el) {
-		// TODO Auto-generated method stub
-		return null;
+		return el.getHead().accept(this); //
 	}
 	
 
