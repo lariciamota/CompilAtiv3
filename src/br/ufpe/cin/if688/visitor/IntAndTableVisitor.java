@@ -24,74 +24,100 @@ public class IntAndTableVisitor implements IVisitor<IntAndTable> {
 
 	@Override
 	public IntAndTable visit(Stm s) {
-		// TODO Auto-generated method stub
-		return null;
+		return s.accept(this);
 	}
 
 	@Override
 	public IntAndTable visit(AssignStm s) {
-		// TODO Auto-generated method stub
-		return null;
+		this.t.id = s.getId();
+		this.t.value = s.getExp().accept(this).result;
+		IntAndTable it = new IntAndTable(this.t.value, this.t);
+		return it;
 	}
 
 	@Override
 	public IntAndTable visit(CompoundStm s) {
-		// TODO Auto-generated method stub
+		//?
 		return null;
 	}
 
 	@Override
 	public IntAndTable visit(PrintStm s) {
-		// TODO Auto-generated method stub
-		return null;
+		return s.getExps().accept(this);
 	}
 
 	@Override
 	public IntAndTable visit(Exp e) {
-		// TODO Auto-generated method stub
-		return null;
+		return e.accept(this);
 	}
 
 	@Override
 	public IntAndTable visit(EseqExp e) {
-		// TODO Auto-generated method stub
-		return null;
+		IntAndTable it1 = e.getStm().accept(this);
+		IntAndTable it2 = e.getExp().accept(this);
+		this.t = it1.table;
+		this.t.value = it2.result;
+		IntAndTable it = new IntAndTable(0, t);
+		return it;
 	}
 
 	@Override
 	public IntAndTable visit(IdExp e) {
-		// TODO Auto-generated method stub
-		return null;
+		IntAndTable it = new IntAndTable(0, t);
+		if (this.t.id == e.getId()){
+			it.result = this.t.value;
+		} else {
+			it = new IntAndTableVisitor(t.tail).visit(e);
+		}
+		return it;
 	}
 
 	@Override
 	public IntAndTable visit(NumExp e) {
-		// TODO Auto-generated method stub
-		return null;
+		IntAndTable it = new IntAndTable(e.getNum(), t);
+		return it;
 	}
 
 	@Override
 	public IntAndTable visit(OpExp e) {
-		// TODO Auto-generated method stub
-		return null;
+		int left = e.getLeft().accept(this).result;
+		int right = e.getRight().accept(this).result;
+		int op = e.getOper();
+		int result = 0;
+		switch(op) {
+		case 1:
+			result = left + right;
+			break;
+		case 2:
+			result = left - right;
+			break;
+		case 3:
+			result = left * right;
+			break;
+		case 4:
+			result = left / right;
+			break;
+		default: System.out.println("Op invalida");
+		}
+		IntAndTable it = new IntAndTable(result, this.t);
+		return it;
 	}
 
 	@Override
 	public IntAndTable visit(ExpList el) {
-		// TODO Auto-generated method stub
-		return null;
+		return el.accept(this);
 	}
 
 	@Override
 	public IntAndTable visit(PairExpList el) {
-		// TODO Auto-generated method stub
+		el.getHead().accept(this);
+		el.getTail().accept(this);
 		return null;
 	}
 
 	@Override
 	public IntAndTable visit(LastExpList el) {
-		// TODO Auto-generated method stub
-		return null;
+		return el.getHead().accept(this);
 	}
 
 

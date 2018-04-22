@@ -12,10 +12,16 @@ import br.ufpe.cin.if688.ast.OpExp;
 import br.ufpe.cin.if688.ast.PairExpList;
 import br.ufpe.cin.if688.ast.PrintStm;
 import br.ufpe.cin.if688.ast.Stm;
+import br.ufpe.cin.if688.symboltable.IntAndTable;
 import br.ufpe.cin.if688.symboltable.Table;
+import br.ufpe.cin.if688.visitor.IntAndTableVisitor;
 
 public class Interpreter implements IVisitor<Table> {
-	
+	/*
+	 * você deve "interpretar" o código usando Java,
+	 * utilizando as classes Table e IntAndTable 
+	 * como tabelas de símbolos auxiliares;
+	 */
 	//a=8;b=80;a=7;
 	// a->7 ==> b->80 ==> a->8 ==> NIL
 	private Table t;
@@ -26,74 +32,102 @@ public class Interpreter implements IVisitor<Table> {
 
 	@Override
 	public Table visit(Stm s) {
-		// TODO Auto-generated method stub
-		return null;
+		this.t = s.accept(this);
+		return t;
 	}
 
 	@Override
 	public Table visit(AssignStm s) {
-		// TODO Auto-generated method stub
-		return null;
+		IntAndTable it = s.getExp().accept(new IntAndTableVisitor(t));
+		this.t = new Table(s.getId(), it.result, it.table);
+		return t;
 	}
 
 	@Override
 	public Table visit(CompoundStm s) {
-		// TODO Auto-generated method stub
-		return null;
+		// a = 512+3; print(a)
+		//AssignStm --> resultado vai produzir uma tabela { a ==> 515 }
+		s.getStm1().accept(this);
+		s.getStm2().accept(this);
+		return t;
+	}
+	
+	public Table printaux(Exp e){
+		IntAndTable it = e.accept(new IntAndTableVisitor(t));
+		this.t = it.table;
+		System.out.println(it.result);
+		return t;
+	}
+	
+	public void aux(ExpList el){
+		if(el instanceof LastExpList){
+			LastExpList le = (LastExpList) el;
+			Exp e = le.getHead();
+			printaux(e);
+		} else {
+			PairExpList pe = (PairExpList) el;
+			Exp e = pe.getHead();
+			printaux(e);
+			aux(pe.getTail());
+		}
 	}
 
 	@Override
 	public Table visit(PrintStm s) {
-		// TODO Auto-generated method stub
-		return null;
+		ExpList el = s.getExps();
+		aux(el);
+		return t;
 	}
 
 	@Override
 	public Table visit(Exp e) {
-		// TODO Auto-generated method stub
-		return null;
+		this.t = e.accept(this);
+		return t;
 	}
 
 	@Override
 	public Table visit(EseqExp e) {
-		// TODO Auto-generated method stub
-		return null;
+		e.getStm().accept(this);
+		e.getExp().accept(this);
+		return t;
 	}
 
 	@Override
 	public Table visit(IdExp e) {
-		// TODO Auto-generated method stub
-		return null;
+		this.t.id = e.getId();
+		return t;
 	}
 
 	@Override
 	public Table visit(NumExp e) {
-		// TODO Auto-generated method stub
-		return null;
+		this.t.value = e.getNum();
+		return t;
 	}
 
 	@Override
 	public Table visit(OpExp e) {
-		// TODO Auto-generated method stub
-		return null;
+		IntAndTable it = e.accept(new IntAndTableVisitor(t));
+		t.value = it.result;
+		return t;
 	}
 
 	@Override
 	public Table visit(ExpList el) {
-		// TODO Auto-generated method stub
-		return null;
+		this.t = el.accept(this);
+		return t;
 	}
 
 	@Override
 	public Table visit(PairExpList el) {
-		// TODO Auto-generated method stub
-		return null;
+		el.getHead().accept(this);
+		el.getTail().accept(this);
+		return t;
 	}
 
 	@Override
 	public Table visit(LastExpList el) {
-		// TODO Auto-generated method stub
-		return null;
+		el.getHead().accept(this);
+		return t;
 	}
 
 
