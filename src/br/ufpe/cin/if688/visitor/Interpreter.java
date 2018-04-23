@@ -87,8 +87,10 @@ public class Interpreter implements IVisitor<Table> {
 
 	@Override
 	public Table visit(EseqExp e) {
-		e.getStm().accept(this);
-		e.getExp().accept(this);
+		Table tb = e.getStm().accept(this);
+		IntAndTable it = e.getExp().accept(new IntAndTableVisitor(tb));
+		this.t.id = tb.id;
+		this.t.value = it.result;
 		return t;
 	}
 
