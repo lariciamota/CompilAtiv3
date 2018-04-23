@@ -54,6 +54,7 @@ public class IntAndTableVisitor implements IVisitor<IntAndTable> {
 	@Override
 	public IntAndTable visit(EseqExp e) {
 		Table tstm = e.getStm().accept(new Interpreter(this.t));
+		this.t = tstm;
 		IntAndTable itexp = e.getExp().accept(this);
 		IntAndTable it = new IntAndTable(itexp.result, tstm);
 		return it;
