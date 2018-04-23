@@ -77,4 +77,11 @@ public class InterpreterTest {
 		assertEquals("32\n16\n", outContent.toString());
 	}
 	
+	@Test
+	public void testOutput8() {
+		Interpreter interpreter = new Interpreter(null);
+		Table t = interpreter.visit(Prog.prog3);
+		assertEquals("518\n", outContent.toString());
+	}
+	
 }
