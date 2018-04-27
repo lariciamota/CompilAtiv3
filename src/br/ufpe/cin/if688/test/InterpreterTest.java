@@ -32,56 +32,51 @@ public class InterpreterTest {
 	public void testOutput1() {
 		Interpreter interpreter = new Interpreter(null);
 		Table t = interpreter.visit(Prog.print);
-		assertEquals("4\n", outContent.toString());
+		assertEquals("4.0\n", outContent.toString());
 	}
 
 	@Test
 	public void testOutput2() {
 		Interpreter interpreter = new Interpreter(null);
 		Table t = interpreter.visit(Prog.prog);
-		assertEquals("8\n7\n80\n", outContent.toString());
+		assertEquals("8.0\n7.0\n80.0\n", outContent.toString());
 	}
 
 	@Test
 	public void testOutput3() {
 		Interpreter interpreter = new Interpreter(null);
 		Table t = interpreter.visit(Prog.prog2);
-		assertEquals("512\n", outContent.toString());
+		assertEquals("512.0\n", outContent.toString());
 	}
 	
 	@Test
 	public void testOutput4() {
 		Interpreter interpreter = new Interpreter(null);
 		Table t = interpreter.visit(Prog.printEseqExp);
-		assertEquals("512\n", outContent.toString());
+		assertEquals("512.0\n", outContent.toString());
 	}
 	
 	@Test
 	public void testOutput5() {
 		Interpreter interpreter = new Interpreter(null);
 		Table t = interpreter.visit(Prog.print1234);
-		assertEquals("0\n1\n2\n3\n4\n", outContent.toString());
+		assertEquals("0.0\n1.0\n2.0\n3.0\n4.0\n", outContent.toString());
 	}
 	
 	@Test
 	public void testOutput6() {
 		Interpreter interpreter = new Interpreter(null);
 		Table t = interpreter.visit(Prog.printPrint);
-		assertEquals("0\n1\n2\n3\n4\n5\n", outContent.toString());
+		assertEquals("0.0\n1.0\n2.0\n3.0\n4.0\n5.0\n", outContent.toString());
 	}
 	
 	@Test
 	public void testOutput7() {
 		Interpreter interpreter = new Interpreter(null);
 		Table t = interpreter.visit(Prog.progEseqExp);
-		assertEquals("32\n16\n", outContent.toString());
+		assertEquals("32.0\n16.0\n", outContent.toString());
 	}
 	
-	@Test
-	public void testOutput8() {
-		Interpreter interpreter = new Interpreter(null);
-		Table t = interpreter.visit(Prog.prog3);
-		assertEquals("518\n", outContent.toString());
-	}
+	
 	
 }

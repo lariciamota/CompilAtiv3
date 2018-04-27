@@ -115,33 +115,26 @@ public class Prog {
 			)
 		);
 		
-		// a=512+3; a=515+3; print(a)
-		static Stm prog3 = 
-				new CompoundStm(
-						new AssignStm(
-								"a", 
-								new OpExp(
-										new NumExp(512), 
-										OpExp.Plus, 
-										new NumExp(3)
-								)
-						),
-				new CompoundStm(
-						new AssignStm(
-								"a", 
-								new OpExp(
-										new NumExp(515), 
-										OpExp.Plus, 
-										new NumExp(3)
-								)
-						),
-						new PrintStm(
-								new LastExpList(
-										new IdExp("a")
-								)
-						)
-				)
-		);
+		// a=512+3; a=515+3;
+				static Stm prog3 = 
+								new CompoundStm(
+										new AssignStm(
+												"a", 
+												new OpExp(
+														new NumExp(512), 
+														OpExp.Plus, 
+														new NumExp(3)
+												)
+										),
+										new AssignStm(
+												"a", 
+												new OpExp(
+														new NumExp(515), 
+														OpExp.Plus, 
+														new NumExp(3)
+												)
+										)
+								);
 
 //print( (a = 512,a) )
 			static Stm printEseqExp = new PrintStm(

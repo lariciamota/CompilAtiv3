@@ -37,7 +37,8 @@ public class IntAndTableVisitor implements IVisitor<IntAndTable> {
 
 	@Override
 	public IntAndTable visit(CompoundStm s) {
-		//?
+		s.getStm1().accept(this);
+		s.getStm2().accept(this);
 		return null;
 	}
 
@@ -79,10 +80,10 @@ public class IntAndTableVisitor implements IVisitor<IntAndTable> {
 
 	@Override
 	public IntAndTable visit(OpExp e) {
-		int left = e.getLeft().accept(this).result;
-		int right = e.getRight().accept(this).result;
+		double left = e.getLeft().accept(this).result;
+		double right = e.getRight().accept(this).result;
 		int op = e.getOper();
-		int result = 0;
+		double result = 0;
 		switch(op) {
 		case 1:
 			result = left + right;
